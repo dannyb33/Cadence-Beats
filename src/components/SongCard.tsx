@@ -66,7 +66,16 @@ const SongCard: React.FC<SongCardProps> = ({ song, index, onAddToQueue }) => {
         
         <div className="p-5 flex-1 flex flex-col justify-between">
           <div>
-            <h3 className="text-lg font-semibold text-gray-800 truncate">{song.name}</h3>
+            <h3 className="text-lg font-semibold text-gray-800 truncate">
+              <a
+                href={song.ext_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline"
+              >
+                {song.name}
+              </a>
+            </h3>
             <p className="text-gray-600 truncate">{song.artists?.map(artist => artist.name).join(', ')}</p>
             <p className="text-sm text-gray-500 mt-1">{song.album?.name}</p>
           </div>

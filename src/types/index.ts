@@ -22,4 +22,5 @@ export interface Song {
   album?: Album;
   preview_url?: string;
   popularity: number;
+  ext_url: string;
 }

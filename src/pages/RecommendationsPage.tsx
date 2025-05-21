@@ -26,7 +26,7 @@ const RecommendationsPage: React.FC = () => {
     setError(null);
     
     try {
-      const results = await fetchSongsByBPM(bpm, 25);
+      const results = await fetchSongsByBPM(bpm, 50);
       setSongs(results);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred');

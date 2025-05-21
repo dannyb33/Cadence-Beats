@@ -25,8 +25,6 @@ async function fetchSongsFromBPMApi(bpm: number, limit: number): Promise<{ title
   return response.data.tempo.map((song: { song_title: string, artist: {name: string} }) => {
     const artistName = song.artist.name;
 
-    console.log(song.song_title);
-    console.log(artistName);
     return {
       title: song.song_title,
       artist: artistName
@@ -58,7 +56,8 @@ async function searchOnSpotify(title: string, artist: string): Promise<Song | nu
         images: track.album.images
       } : undefined,
       preview_url: track.preview_url || undefined,
-      popularity: track.popularity
+      popularity: track.popularity,
+      ext_url: track.external_urls.spotify
     };
   } catch (error) {
     console.error('Error searching on Spotify:', error);
@@ -86,6 +85,7 @@ export async function fetchSongsByBPM(bpm: number, limit: number): Promise<Song[
       if (!seen.has(key)) {
         seen.add(key);
         uniqueTracks.push(song);
+        console.log(song);
       }
     }
 
@@ -102,47 +102,47 @@ export async function fetchSongsByBPM(bpm: number, limit: number): Promise<Song[
 }
 
 // For development/testing without the backend
-export async function mockFetchSongsByBPM(): Promise<Song[]> {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve([
-        {
-          id: '1',
-          name: 'Shape of You',
-          artists: [{ id: 'a1', name: 'Ed Sheeran' }],
-          album: {
-            id: 'alb1',
-            name: '÷ (Divide)',
-            images: [{ url: 'https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96', height: 640, width: 640 }]
-          },
-          preview_url: 'https://p.scdn.co/mp3-preview/84462d8e1e4d0f9e5ccd06f0da390f65843774a2',
-          popularity: 98
-        },
-        {
-          id: '2',
-          name: 'Blinding Lights',
-          artists: [{ id: 'a2', name: 'The Weeknd' }],
-          album: {
-            id: 'alb2',
-            name: 'After Hours',
-            images: [{ url: 'https://i.scdn.co/image/ab67616d0000b2738863bc11d2aa12b54f5aeb36', height: 640, width: 640 }]
-          },
-          preview_url: 'https://p.scdn.co/mp3-preview/8b6e544b5625e7f1a3a9b8882a64962db5879a31',
-          popularity: 95
-        },
-        {
-          id: '3',
-          name: 'Dance Monkey',
-          artists: [{ id: 'a3', name: 'Tones and I' }],
-          album: {
-            id: 'alb3',
-            name: 'The Kids Are Coming',
-            images: [{ url: 'https://i.scdn.co/image/ab67616d0000b273c6f7af36530731ae7a7e4c7a', height: 640, width: 640 }]
-          },
-          preview_url: 'https://p.scdn.co/mp3-preview/8742e0c607cd58706b5cc99e22b1fa8885c29b4f',
-          popularity: 92
-        }
-      ]);
-    }, 1500);
-  });
-}
+// export async function mockFetchSongsByBPM(): Promise<Song[]> {
+//   return new Promise((resolve) => {
+//     setTimeout(() => {
+//       resolve([
+//         {
+//           id: '1',
+//           name: 'Shape of You',
+//           artists: [{ id: 'a1', name: 'Ed Sheeran' }],
+//           album: {
+//             id: 'alb1',
+//             name: '÷ (Divide)',
+//             images: [{ url: 'https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96', height: 640, width: 640 }]
+//           },
+//           preview_url: 'https://p.scdn.co/mp3-preview/84462d8e1e4d0f9e5ccd06f0da390f65843774a2',
+//           popularity: 98
+//         },
+//         {
+//           id: '2',
+//           name: 'Blinding Lights',
+//           artists: [{ id: 'a2', name: 'The Weeknd' }],
+//           album: {
+//             id: 'alb2',
+//             name: 'After Hours',
+//             images: [{ url: 'https://i.scdn.co/image/ab67616d0000b2738863bc11d2aa12b54f5aeb36', height: 640, width: 640 }]
+//           },
+//           preview_url: 'https://p.scdn.co/mp3-preview/8b6e544b5625e7f1a3a9b8882a64962db5879a31',
+//           popularity: 95
+//         },
+//         {
+//           id: '3',
+//           name: 'Dance Monkey',
+//           artists: [{ id: 'a3', name: 'Tones and I' }],
+//           album: {
+//             id: 'alb3',
+//             name: 'The Kids Are Coming',
+//             images: [{ url: 'https://i.scdn.co/image/ab67616d0000b273c6f7af36530731ae7a7e4c7a', height: 640, width: 640 }]
+//           },
+//           preview_url: 'https://p.scdn.co/mp3-preview/8742e0c607cd58706b5cc99e22b1fa8885c29b4f',
+//           popularity: 92
+//         }
+//       ]);
+//     }, 1500);
+//   });
+// }
