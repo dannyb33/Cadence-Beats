@@ -39,7 +39,6 @@ async function searchOnSpotify(title: string, artist: string): Promise<Song | nu
     const query = `${title}, ${artist}`;
     const result = await sdk.search(query, ["track"]);
     const track = result.tracks.items[0];
-    console.log(track)
 
     if (!track) return null;
 
@@ -85,7 +84,6 @@ export async function fetchSongsByBPM(bpm: number, limit: number): Promise<Song[
       if (!seen.has(key)) {
         seen.add(key);
         uniqueTracks.push(song);
-        console.log(song);
       }
     }
 
