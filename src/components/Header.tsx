@@ -9,7 +9,7 @@ const Header: React.FC = () => {
           <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-r from-purple-600 to-blue-500 text-white">
             <Music className="w-6 h-6" />
           </div>
-          <h1 className="ml-3 text-2xl font-bold text-gray-800">Tempo Match</h1>
+          <h1 className="ml-3 text-2xl font-bold text-gray-800">Cadence Beats</h1>
         </div>
         
         <nav className="hidden md:flex items-center space-x-6">
@@ -20,7 +20,7 @@ const Header: React.FC = () => {
         
         <div className="hidden md:block">
           <a
-            href="https://github.com/yourusername/tempo-match"
+            href="https://github.com/dannyb33/Cadence-Beats"
             target="_blank"
             rel="noreferrer"
             className="py-2 px-4 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-md transition-colors"

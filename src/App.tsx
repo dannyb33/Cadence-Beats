@@ -19,7 +19,7 @@ function App() {
             </Routes>
             
             <footer className="mt-20 py-8 text-center text-gray-500 text-sm">
-              <p>© {new Date().getFullYear()} Tempo Match. All rights reserved.</p>
+              <p>© {new Date().getFullYear()} Cadence Beats. All rights reserved.</p>
               <p className="mt-2">Powered by Spotify API</p>
             </footer>
           </div>
