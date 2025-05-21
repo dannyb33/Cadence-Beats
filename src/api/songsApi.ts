@@ -2,11 +2,11 @@ import axios from 'axios';
 import { SpotifyApi } from '@spotify/web-api-ts-sdk';
 import { Song } from '../types';
 
-const BPM_API_KEY = "5a9b8215eab884d485309cb9d3a316b9";
-const BPM_URL = 'https://api.getsong.co/';
+const BPM_API_KEY = import.meta.env.VITE_GETSONGBPM_API_KEY;
+const SPOTIFY_CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
+const SPOTIFY_CLIENT_SECRET = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
 
-const SPOTIFY_CLIENT_ID = "f8bdbd633e9641a9b5e958540c3bd90e";
-const SPOTIFY_CLIENT_SECRET = "523c093f21f4485abfaa79f51fdeeb91";
+const BPM_URL = 'https://api.getsong.co/';
 
 const spotify = SpotifyApi.withClientCredentials(
   SPOTIFY_CLIENT_ID,
