@@ -38,7 +38,7 @@ async function searchOnSpotify(title: string, artist: string): Promise<Song | nu
   try {
     const sdk = await spotify;
     // Search with both title and artist if artist is provided
-    const query = `${artist}, ${title}`;
+    const query = `${title}, ${artist}`;
     const result = await sdk.search(query, ["track"]);
     const track = result.tracks.items[0];
     console.log(track)
@@ -69,19 +69,30 @@ async function searchOnSpotify(title: string, artist: string): Promise<Song | nu
 export async function fetchSongsByBPM(bpm: number, limit: number): Promise<Song[]> {
   try {
     const songs = await fetchSongsFromBPMApi(bpm, limit); // [{ title, artist }...]
-    
-    const tracks: Song[] = [];
 
-    for (const { title, artist } of songs) {
-      const result = await searchOnSpotify(title, artist);
-      if (result) {
-        tracks.push(result);
+    const results = await Promise.all(
+      songs.map(({ title, artist }) => searchOnSpotify(title, artist))
+    );
+
+    // Filter out nulls
+    const nonNullResults = results.filter((song): song is Song => song !== null);
+
+    // Deduplicate by (title, artist) combo
+    const seen = new Set<string>();
+    const uniqueTracks: Song[] = [];
+
+    for (const song of nonNullResults) {
+      const key = `${song.name.toLowerCase()}|${song.artists[0].name.toLowerCase()}`;
+      if (!seen.has(key)) {
+        seen.add(key);
+        uniqueTracks.push(song);
       }
     }
 
-    return tracks
+    return uniqueTracks
       .sort((a, b) => b.popularity - a.popularity)
       .slice(0, 5);
+
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(`Failed to fetch songs: ${error.message}`);
