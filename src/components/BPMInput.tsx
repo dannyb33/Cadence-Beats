@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Minus, Plus, Volume2 } from 'lucide-react';
 
 interface BPMInputProps {
   onSubmit: (bpm: number) => void;
   isLoading: boolean;
+  currentBpm?: number;
 }
 
-const BPMInput: React.FC<BPMInputProps> = ({ onSubmit, isLoading }) => {
+const BPMInput: React.FC<BPMInputProps> = ({ onSubmit, isLoading, currentBpm }) => {
   const [bpm, setBpm] = useState<number>(120);
   
+  useEffect(() => {
+    if (currentBpm) {
+      setBpm(currentBpm);
+    }
+  }, [currentBpm]);
+
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBpm(parseInt(e.target.value, 10));
   };
