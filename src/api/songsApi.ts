@@ -77,7 +77,7 @@ export async function fetchSongsByBPM(bpm: number, limit: number): Promise<Song[
 
     return tracks
       .sort((a, b) => b.popularity - a.popularity)
-      .slice(0, 3);
+      .slice(0, 5);
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(`Failed to fetch songs: ${error.message}`);
