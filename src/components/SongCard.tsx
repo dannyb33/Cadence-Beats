@@ -1,15 +1,17 @@
 import React, { useState, useRef } from 'react';
-import { Play, Pause, Heart } from 'lucide-react';
+import { Play, Pause, Heart, Plus } from 'lucide-react';
 import { Song } from '../types';
 
 interface SongCardProps {
   song: Song;
   index: number;
+  onAddToQueue: (song: Song) => void;
 }
 
-const SongCard: React.FC<SongCardProps> = ({ song, index }) => {
+const SongCard: React.FC<SongCardProps> = ({ song, index, onAddToQueue }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFavorited, setIsFavorited] = useState(false);
+  const [isQueued, setIsQueued] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const togglePlay = () => {
@@ -25,7 +27,12 @@ const SongCard: React.FC<SongCardProps> = ({ song, index }) => {
     setIsFavorited(!isFavorited);
   };
 
-  // Animation delay based on index for staggered entrance
+  const handleAddToQueue = () => {
+    onAddToQueue(song);
+    setIsQueued(true);
+    setTimeout(() => setIsQueued(false), 2000); // Reset visual feedback after 2 seconds
+  };
+
   const animationDelay = `${index * 150}ms`;
 
   return (
@@ -65,11 +72,26 @@ const SongCard: React.FC<SongCardProps> = ({ song, index }) => {
           </div>
           
           <div className="mt-4 flex items-center justify-between">
-            <div className="flex items-center">
-              <div className="flex items-center justify-center w-8 h-8 bg-purple-100 rounded-full">
-                <span className="text-xs font-medium text-purple-800">{song.popularity}</span>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center">
+                <div className="flex items-center justify-center w-8 h-8 bg-purple-100 rounded-full">
+                  <span className="text-xs font-medium text-purple-800">{song.popularity}</span>
+                </div>
+                <span className="ml-2 text-xs text-gray-500">Popularity</span>
               </div>
-              <span className="ml-2 text-xs text-gray-500">Popularity</span>
+              
+              <button 
+                onClick={handleAddToQueue}
+                className={`flex items-center px-3 py-1 rounded-full transition-all ${
+                  isQueued 
+                    ? 'bg-green-100 text-green-700' 
+                    : 'bg-purple-100 text-purple-700 hover:bg-purple-200'
+                }`}
+                disabled={isQueued}
+              >
+                <Plus className="w-4 h-4 mr-1" />
+                {isQueued ? 'Added' : 'Queue'}
+              </button>
             </div>
             
             <button 
