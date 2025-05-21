@@ -18,7 +18,7 @@ function App() {
     
     try {
       // In a real app, use fetchSongsByBPM instead of mockFetchSongsByBPM
-      const results = await fetchSongsByBPM(bpm, 2);
+      const results = await fetchSongsByBPM(bpm, 10);
       setSongs(results);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred');

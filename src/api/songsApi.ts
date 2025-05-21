@@ -22,8 +22,11 @@ async function fetchSongsFromBPMApi(bpm: number, limit: number): Promise<{ title
     }
   });
 
-  return response.data.tempo.map((song: { song_title: string, artist: { name: string }[] }) => {
-    const artistName = song.artist?.[0]?.name ?? "Unknown Artist";
+  return response.data.tempo.map((song: { song_title: string, artist: {name: string} }) => {
+    const artistName = song.artist.name;
+
+    console.log(song.song_title);
+    console.log(artistName);
     return {
       title: song.song_title,
       artist: artistName
@@ -31,13 +34,14 @@ async function fetchSongsFromBPMApi(bpm: number, limit: number): Promise<{ title
   });
 }
 
-async function searchOnSpotify(title: string, artist?: string): Promise<Song | null> {
+async function searchOnSpotify(title: string, artist: string): Promise<Song | null> {
   try {
     const sdk = await spotify;
     // Search with both title and artist if artist is provided
-    const query = `${title} ${artist}`;
+    const query = `${artist}, ${title}`;
     const result = await sdk.search(query, ["track"]);
     const track = result.tracks.items[0];
+    console.log(track)
 
     if (!track) return null;
 
