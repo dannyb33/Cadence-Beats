@@ -15,6 +15,9 @@ const RecommendationsPage: React.FC = () => {
   const [currentBpm, setCurrentBpm] = useState<number>(120);
   const { queue, addToQueue, removeFromQueue } = useQueue();
 
+  const currStartIndex = React.useRef<number>(0);
+  const currSongs = React.useRef<Song[]>([]);
+
   useEffect(() => {
     const bpm = Number(searchParams.get('bpm')) || 120;
     setCurrentBpm(bpm);
@@ -26,8 +29,10 @@ const RecommendationsPage: React.FC = () => {
     setError(null);
     
     try {
-      const results = await fetchSongsByBPM(bpm, 50);
-      setSongs(results);
+      const fetchedSongs = await fetchSongsByBPM(bpm, 50);
+      currSongs.current = fetchedSongs;
+      currStartIndex.current = 0;
+      setSongSlice(fetchedSongs, currStartIndex.current);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred');
       setSongs([]);
@@ -42,11 +47,26 @@ const RecommendationsPage: React.FC = () => {
   };
 
   const handleRefresh = () => {
-    loadSongs(currentBpm);
+    if(currStartIndex.current + 5 < currSongs.current.length)
+    {
+      currStartIndex.current += 5;
+    }
+    else
+    {
+      currStartIndex.current = 0;
+    }
+    setSongSlice(currSongs.current, currStartIndex.current);
   };
 
   const handleBackToHome = () => {
+    currStartIndex.current = 0;
     navigate(`/?bpm=${currentBpm}`);
+  };
+
+  const setSongSlice = async (songs : Song[], startIndex : number) =>
+  {
+    console.log(songs.slice(startIndex, startIndex+5));
+    setSongs(songs.slice(startIndex, startIndex+5));
   };
 
   return (
