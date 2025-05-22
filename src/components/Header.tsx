@@ -1,21 +1,53 @@
 import React from 'react';
-import { Music } from 'lucide-react';
+import { Music, History } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
 
 const Header: React.FC = () => {
+  const location = useLocation();
+
   return (
     <header className="w-full py-6 px-4">
       <div className="max-w-6xl mx-auto flex items-center justify-between">
-        <div className="flex items-center">
+        <Link to="/" className="flex items-center">
           <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-r from-purple-600 to-blue-500 text-white">
             <Music className="w-6 h-6" />
           </div>
           <h1 className="ml-3 text-2xl font-bold text-gray-800">Cadence Beats</h1>
-        </div>
+        </Link>
         
         <nav className="hidden md:flex items-center space-x-6">
-          <a href="#" className="text-gray-700 hover:text-purple-600 transition-colors">Home</a>
-          <a href="#" className="text-gray-700 hover:text-purple-600 transition-colors">Favorites</a>
-          <a href="#" className="text-gray-700 hover:text-purple-600 transition-colors">About</a>
+          <Link 
+            to="/" 
+            className={`text-gray-700 hover:text-purple-600 transition-colors ${
+              location.pathname === '/' ? 'text-purple-600 font-medium' : ''
+            }`}
+          >
+            Home
+          </Link>
+          <Link 
+            to="/metronome" 
+            className={`text-gray-700 hover:text-purple-600 transition-colors ${
+              location.pathname === '/metronome' ? 'text-purple-600 font-medium' : ''
+            }`}
+          >
+            Metronome
+          </Link>
+          <Link 
+            to="/favorites" 
+            className={`text-gray-700 hover:text-purple-600 transition-colors ${
+              location.pathname === '/favorites' ? 'text-purple-600 font-medium' : ''
+            }`}
+          >
+            Favorites
+          </Link>
+          <Link 
+            to="/history" 
+            className={`text-gray-700 hover:text-purple-600 transition-colors ${
+              location.pathname === '/history' ? 'text-purple-600 font-medium' : ''
+            }`}
+          >
+            History
+          </Link>
         </nav>
         
         <div className="hidden md:block">
@@ -31,6 +63,6 @@ const Header: React.FC = () => {
       </div>
     </header>
   );
-};
+}
 
 export default Header;

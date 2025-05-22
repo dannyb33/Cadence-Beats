@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
-import { Play, Pause, Heart, Plus } from 'lucide-react';
+import { Play, Pause, Heart, Plus, Music2 } from 'lucide-react';
 import { Song } from '../types';
+import { useFavorites } from '../context/FavoritesContext.tsx';
 
 interface SongCardProps {
   song: Song;
@@ -13,6 +14,7 @@ const SongCard: React.FC<SongCardProps> = ({ song, index, onAddToQueue }) => {
   const [isFavorited, setIsFavorited] = useState(false);
   const [isQueued, setIsQueued] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { favorites, addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
 
   const togglePlay = () => {
     if (isPlaying) {
@@ -23,8 +25,12 @@ const SongCard: React.FC<SongCardProps> = ({ song, index, onAddToQueue }) => {
     setIsPlaying(!isPlaying);
   };
 
-  const toggleFavorite = () => {
-    setIsFavorited(!isFavorited);
+    const toggleFavorite = () => {
+    if (isFavorite(song.id)) {
+      removeFromFavorites(song.id);
+    } else {
+      addToFavorites(song);
+    }
   };
 
   const handleAddToQueue = () => {
@@ -89,6 +95,11 @@ const SongCard: React.FC<SongCardProps> = ({ song, index, onAddToQueue }) => {
                 <span className="ml-2 text-xs text-gray-500">Popularity</span>
               </div>
               
+              <div className="flex items-center">
+                <Music2 className="w-4 h-4 text-purple-600 mr-1" />
+                <span className="text-sm font-medium text-gray-700">{song.bpm || '---'} BPM</span>
+              </div>
+              
               <button 
                 onClick={handleAddToQueue}
                 className={`flex items-center px-3 py-1 rounded-full transition-all ${
@@ -105,10 +116,10 @@ const SongCard: React.FC<SongCardProps> = ({ song, index, onAddToQueue }) => {
             
             <button 
               onClick={toggleFavorite}
-              className={`p-2 rounded-full transition-colors ${isFavorited ? 'text-pink-500' : 'text-gray-400 hover:text-pink-500'}`}
-              aria-label={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
+              className={`p-2 rounded-full transition-colors ${isFavorite(song.id) ? 'text-pink-500' : 'text-gray-400 hover:text-pink-500'}`}
+              aria-label={isFavorite(song.id) ? 'Remove from favorites' : 'Add to favorites'}
             >
-              <Heart className={`w-5 h-5 ${isFavorited ? 'fill-current' : ''}`} />
+              <Heart className={`w-5 h-5 ${isFavorite(song.id) ? 'fill-current' : ''}`} />
             </button>
           </div>
         </div>

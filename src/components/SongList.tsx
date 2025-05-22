@@ -2,6 +2,7 @@ import React from 'react';
 import SongCard from './SongCard';
 import { Song } from '../types';
 import { Music, RefreshCw, Plus, Minus } from 'lucide-react';
+import { useCadence } from '../context/CadenceContext';
 
 interface SongListProps {
   songs: Song[];
@@ -22,6 +23,8 @@ const SongList: React.FC<SongListProps> = ({
   onRefresh,
   onAddToQueue
 }) => {
+  const { suggestedAdjustment } = useCadence();
+
   const adjustBpm = (adjustment: number) => {
     const newBpm = Math.min(Math.max(currentBpm + adjustment, 60), 200);
     onBpmChange(newBpm);
@@ -83,6 +86,15 @@ const SongList: React.FC<SongListProps> = ({
         </div>
       </div>
 
+      {suggestedAdjustment && (
+        <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <p className="text-yellow-800">
+            Your cadence is running {suggestedAdjustment === 'up' ? 'faster' : 'slower'} than the current tempo.
+            Consider adjusting the BPM {suggestedAdjustment === 'up' ? 'up' : 'down'} to match your natural rhythm.
+          </p>
+        </div>
+      )}
+
       <div className="mb-6 flex justify-center space-x-4">
         <button
           onClick={() => adjustBpm(-5)}
@@ -104,7 +116,7 @@ const SongList: React.FC<SongListProps> = ({
       
       <div className="grid grid-cols-1 gap-6">
         {songs.map((song, index) => (
-          <div key={song.id}>
+          <div key={song.id} className={suggestedAdjustment && index === 0 ? 'ring-2 ring-yellow-400 rounded-xl' : ''}>
             <SongCard 
               song={song} 
               index={index}

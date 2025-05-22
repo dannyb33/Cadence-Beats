@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import SongList from '../components/SongList';
+import MetronomeControl from '../components/MetronomeControl';
 import { Song } from '../types';
 import { fetchSongsByBPM } from '../api/songsApi';
 import { ArrowLeft, Music2, ListMusic } from 'lucide-react';
 import { useQueue } from '../context/QueueContext';
+import { useCadence } from '../context/CadenceContext';
 
 const RecommendationsPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -14,6 +16,7 @@ const RecommendationsPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [currentBpm, setCurrentBpm] = useState<number>(120);
   const { queue, addToQueue, removeFromQueue } = useQueue();
+  const { setTargetBpm } = useCadence();
 
   const currStartIndex = React.useRef<number>(0);
   const currSongs = React.useRef<Song[]>([]);
@@ -21,8 +24,9 @@ const RecommendationsPage: React.FC = () => {
   useEffect(() => {
     const bpm = Number(searchParams.get('bpm')) || 120;
     setCurrentBpm(bpm);
+    setTargetBpm(bpm);
     loadSongs(bpm);
-  }, [searchParams]);
+  }, [searchParams, setTargetBpm]);
 
   const loadSongs = async (bpm: number) => {
     setIsLoading(true);
@@ -43,6 +47,7 @@ const RecommendationsPage: React.FC = () => {
 
   const handleBpmChange = (newBpm: number) => {
     setCurrentBpm(newBpm);
+    setTargetBpm(newBpm);
     navigate(`/recommendations?bpm=${newBpm}`);
   };
 
@@ -86,6 +91,10 @@ const RecommendationsPage: React.FC = () => {
             <span className="text-lg font-semibold text-gray-800">Current BPM: </span>
             <span className="text-2xl font-bold text-purple-600 ml-2">{currentBpm}</span>
           </div>
+        </div>
+
+        <div className="mb-8">
+          <MetronomeControl bpm={currentBpm} />
         </div>
 
         {queue.length > 0 && (

@@ -22,5 +22,14 @@ export interface Song {
   album?: Album;
   preview_url?: string;
   popularity: number;
+  bpm?: number;
   ext_url: string;
+}
+
+export interface Run {
+  id: string;
+  date: string;
+  duration: number;
+  avgBPM: number;
+  songsPlayed: number;
 }

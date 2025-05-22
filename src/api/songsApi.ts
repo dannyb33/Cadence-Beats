@@ -34,7 +34,7 @@ async function fetchSongsFromBPMApi(bpm: number, limit: number): Promise<{ title
 
 async function searchOnSpotify(title: string, artist: string): Promise<Song | null> {
   try {
-    const sdk = await spotify;
+    const sdk = spotify;
     // Search with both title and artist if artist is provided
     const query = `${title}, ${artist}`;
     const result = await sdk.search(query, ["track"]);
