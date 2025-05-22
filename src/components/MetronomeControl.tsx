@@ -9,7 +9,7 @@ interface MetronomeControlProps {
 const MetronomeControl: React.FC<MetronomeControlProps> = ({ bpm }) => {
   const [isActive, setIsActive] = useState(false);
   const [volume, setVolume] = useState(0.5);
-  const [play] = useSound('/metronome-tick.mp3', { volume });
+  const [play] = useSound('/metronome-tick.wav', { volume });
   
   const tick = useCallback(() => {
     if ('vibrate' in navigator) {
