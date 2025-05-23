@@ -4,7 +4,8 @@ import { Song } from '../types';
 interface QueueContextType {
   queue: Song[];
   addToQueue: (song: Song) => void;
-  removeFromQueue: (songId: string) => void;
+  removeFromQueue: (songId: string, index: number) => void;
+  clearQueue: () => void;
 }
 
 const QueueContext = createContext<QueueContextType | undefined>(undefined);
@@ -16,12 +17,21 @@ export function QueueProvider({ children }: { children: React.ReactNode }) {
     setQueue(prevQueue => [...prevQueue, song]);
   };
 
-  const removeFromQueue = (songId: string) => {
-    setQueue(prevQueue => prevQueue.filter(song => song.id !== songId));
+  const removeFromQueue = (songId: string, index: number) => {
+    setQueue(prevQueue => {
+      const newQueue = [...prevQueue];
+      // Only remove the song at the specific index
+      newQueue.splice(index, 1);
+      return newQueue;
+    });
+  };
+
+  const clearQueue = () => {
+    setQueue([]);
   };
 
   return (
-    <QueueContext.Provider value={{ queue, addToQueue, removeFromQueue }}>
+    <QueueContext.Provider value={{ queue, addToQueue, removeFromQueue, clearQueue }}>
       {children}
     </QueueContext.Provider>
   );

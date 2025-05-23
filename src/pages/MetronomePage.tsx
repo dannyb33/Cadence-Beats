@@ -1,9 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
 import useSound from 'use-sound';
+import { useCadence } from '../context/CadenceContext';
 
 const MetronomePage: React.FC = () => {
-  const [bpm, setBpm] = useState<number>(120);
+  const { targetBpm, setTargetBpm } = useCadence();
   const [isActive, setIsActive] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const [play] = useSound('/metronome-tick.mp3', { volume });
@@ -18,24 +19,24 @@ const MetronomePage: React.FC = () => {
   useEffect(() => {
     if (!isActive) return;
 
-    const interval = setInterval(tick, 60000 / bpm);
+    const interval = setInterval(tick, 60000 / targetBpm);
     return () => {
       clearInterval(interval);
       if ('vibrate' in navigator) {
         navigator.vibrate(0);
       }
     };
-  }, [isActive, bpm, tick]);
+  }, [isActive, targetBpm, tick]);
 
   const handleBpmChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value, 10);
     if (value >= 30 && value <= 300) {
-      setBpm(value);
+      setTargetBpm(value);
     }
   };
 
   const adjustBpm = (adjustment: number) => {
-    setBpm(prev => Math.min(Math.max(prev + adjustment, 30), 300));
+    setTargetBpm(prev => Math.min(Math.max(prev + adjustment, 30), 300));
   };
 
   return (
@@ -58,9 +59,9 @@ const MetronomePage: React.FC = () => {
               <input
                 type="number"
                 id="bpm"
-                value={bpm}
+                value={targetBpm}
                 onChange={handleBpmChange}
-                className="w-24 text-center text-2xl font-bold text-gray-800 border-2 border-purple-200 rounded-lg focus:outline-none focus:border-purple-500"
+                className="w-24 text-center text-2xl font-bold text-gray-800 border-2 border-orange-200 rounded-lg focus:outline-none focus:border-orange-500"
                 min="30"
                 max="300"
               />
@@ -81,7 +82,7 @@ const MetronomePage: React.FC = () => {
               {volume === 0 ? (
                 <VolumeX className="w-5 h-5 text-gray-500" />
               ) : (
-                <Volume2 className="w-5 h-5 text-purple-600" />
+                <Volume2 className="w-5 h-5 text-orange-500" />
               )}
               <input
                 type="range"
@@ -90,7 +91,7 @@ const MetronomePage: React.FC = () => {
                 step="0.1"
                 value={volume}
                 onChange={(e) => setVolume(parseFloat(e.target.value))}
-                className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-purple-600"
+                className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-orange-500"
               />
               <span className="text-sm text-gray-600 w-12">
                 {Math.round(volume * 100)}%
@@ -104,7 +105,7 @@ const MetronomePage: React.FC = () => {
               className={`px-8 py-4 rounded-xl text-lg font-semibold transition-all transform hover:scale-105 ${
                 isActive
                   ? 'bg-red-500 text-white hover:bg-red-600'
-                  : 'bg-gradient-to-r from-purple-600 to-blue-500 text-white hover:from-purple-700 hover:to-blue-600'
+                  : 'bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600'
               }`}
             >
               {isActive ? 'Stop' : 'Start'}

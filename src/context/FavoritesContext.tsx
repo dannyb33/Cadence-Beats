@@ -21,7 +21,12 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
   }, [favorites]);
 
   const addToFavorites = (song: Song) => {
-    setFavorites(prev => [...prev, song]);
+    // Ensure we keep the BPM that was set when the song was favorited
+    const songWithBpm = {
+      ...song,
+      bpm: song.bpm || 120 // Fallback to 120 if somehow bpm is not set
+    };
+    setFavorites(prev => [...prev, songWithBpm]);
   };
 
   const removeFromFavorites = (songId: string) => {

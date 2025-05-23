@@ -23,7 +23,7 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: #7c3aed;
+    background: #f97316;
     cursor: pointer;
     border: 2px solid white;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
@@ -31,7 +31,7 @@
   }
   
   input[type="range"]::-webkit-slider-thumb:hover {
-    background: #6d28d9;
+    background: #ea580c;
     transform: scale(1.1);
   }
   
@@ -39,7 +39,7 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: #7c3aed;
+    background: #f97316;
     cursor: pointer;
     border: 2px solid white;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
@@ -47,7 +47,7 @@
   }
   
   input[type="range"]::-moz-range-thumb:hover {
-    background: #6d28d9;
+    background: #ea580c;
     transform: scale(1.1);
   }
 }

@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { Play, Pause, Heart, Plus, Music2 } from 'lucide-react';
 import { Song } from '../types';
-import { useFavorites } from '../context/FavoritesContext.tsx';
+import { useFavorites } from '../context/FavoritesContext';
+import { useCadence } from '../context/CadenceContext';
 
 interface SongCardProps {
   song: Song;
@@ -11,10 +12,10 @@ interface SongCardProps {
 
 const SongCard: React.FC<SongCardProps> = ({ song, index, onAddToQueue }) => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isFavorited, setIsFavorited] = useState(false);
   const [isQueued, setIsQueued] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const { favorites, addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
+  const { targetBpm } = useCadence();
 
   const togglePlay = () => {
     if (isPlaying) {
@@ -25,18 +26,27 @@ const SongCard: React.FC<SongCardProps> = ({ song, index, onAddToQueue }) => {
     setIsPlaying(!isPlaying);
   };
 
-    const toggleFavorite = () => {
+  const toggleFavorite = () => {
+    const songWithBpm = {
+      ...song,
+      bpm: targetBpm
+    };
+    
     if (isFavorite(song.id)) {
       removeFromFavorites(song.id);
     } else {
-      addToFavorites(song);
+      addToFavorites(songWithBpm);
     }
   };
 
   const handleAddToQueue = () => {
-    onAddToQueue(song);
+    const songWithBpm = {
+      ...song,
+      bpm: targetBpm
+    };
+    onAddToQueue(songWithBpm);
     setIsQueued(true);
-    setTimeout(() => setIsQueued(false), 2000); // Reset visual feedback after 2 seconds
+    setTimeout(() => setIsQueued(false), 2000);
   };
 
   const animationDelay = `${index * 150}ms`;
@@ -65,7 +75,7 @@ const SongCard: React.FC<SongCardProps> = ({ song, index, onAddToQueue }) => {
               className="p-3 bg-white bg-opacity-90 rounded-full hover:bg-opacity-100 transition-colors transform hover:scale-105 active:scale-95"
               aria-label={isPlaying ? 'Pause song' : 'Play song'}
             >
-              {isPlaying ? <Pause className="text-purple-600 w-6 h-6" /> : <Play className="text-purple-600 w-6 h-6" />}
+              {isPlaying ? <Pause className="text-orange-500 w-6 h-6" /> : <Play className="text-orange-500 w-6 h-6" />}
             </button>
           </div>
         </div>
@@ -89,15 +99,15 @@ const SongCard: React.FC<SongCardProps> = ({ song, index, onAddToQueue }) => {
           <div className="mt-4 flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="flex items-center">
-                <div className="flex items-center justify-center w-8 h-8 bg-purple-100 rounded-full">
-                  <span className="text-xs font-medium text-purple-800">{song.popularity}</span>
+                <div className="flex items-center justify-center w-8 h-8 bg-orange-100 rounded-full">
+                  <span className="text-xs font-medium text-orange-800">{song.popularity}</span>
                 </div>
                 <span className="ml-2 text-xs text-gray-500">Popularity</span>
               </div>
               
               <div className="flex items-center">
-                <Music2 className="w-4 h-4 text-purple-600 mr-1" />
-                <span className="text-sm font-medium text-gray-700">{song.bpm || '---'} BPM</span>
+                <Music2 className="w-4 h-4 text-orange-500 mr-1" />
+                <span className="text-sm font-medium text-gray-700">{song.bpm || targetBpm} BPM</span>
               </div>
               
               <button 
@@ -105,7 +115,7 @@ const SongCard: React.FC<SongCardProps> = ({ song, index, onAddToQueue }) => {
                 className={`flex items-center px-3 py-1 rounded-full transition-all ${
                   isQueued 
                     ? 'bg-green-100 text-green-700' 
-                    : 'bg-purple-100 text-purple-700 hover:bg-purple-200'
+                    : 'bg-orange-100 text-orange-700 hover:bg-orange-200'
                 }`}
                 disabled={isQueued}
               >
@@ -116,7 +126,7 @@ const SongCard: React.FC<SongCardProps> = ({ song, index, onAddToQueue }) => {
             
             <button 
               onClick={toggleFavorite}
-              className={`p-2 rounded-full transition-colors ${isFavorite(song.id) ? 'text-pink-500' : 'text-gray-400 hover:text-pink-500'}`}
+              className={`p-2 rounded-full transition-colors ${isFavorite(song.id) ? 'text-red-500' : 'text-gray-400 hover:text-red-500'}`}
               aria-label={isFavorite(song.id) ? 'Remove from favorites' : 'Add to favorites'}
             >
               <Heart className={`w-5 h-5 ${isFavorite(song.id) ? 'fill-current' : ''}`} />

@@ -2,7 +2,6 @@ import React from 'react';
 import SongCard from './SongCard';
 import { Song } from '../types';
 import { Music, RefreshCw, Plus, Minus } from 'lucide-react';
-import { useCadence } from '../context/CadenceContext';
 
 interface SongListProps {
   songs: Song[];
@@ -23,8 +22,6 @@ const SongList: React.FC<SongListProps> = ({
   onRefresh,
   onAddToQueue
 }) => {
-  const { suggestedAdjustment } = useCadence();
-
   const adjustBpm = (adjustment: number) => {
     const newBpm = Math.min(Math.max(currentBpm + adjustment, 60), 200);
     onBpmChange(newBpm);
@@ -34,9 +31,9 @@ const SongList: React.FC<SongListProps> = ({
     return (
       <div className="w-full flex flex-col items-center justify-center py-12">
         <div className="animate-pulse flex flex-col items-center">
-          <div className="h-12 w-12 mb-4 rounded-full bg-purple-200"></div>
-          <div className="h-4 w-32 mb-3 rounded bg-purple-200"></div>
-          <div className="h-3 w-24 rounded bg-purple-100"></div>
+          <div className="h-12 w-12 mb-4 rounded-full bg-orange-200"></div>
+          <div className="h-4 w-32 mb-3 rounded bg-orange-200"></div>
+          <div className="h-3 w-24 rounded bg-orange-100"></div>
         </div>
       </div>
     );
@@ -57,12 +54,12 @@ const SongList: React.FC<SongListProps> = ({
   if (songs.length === 0) {
     return (
       <div className="w-full max-w-md mx-auto bg-white bg-opacity-90 backdrop-blur-lg rounded-xl shadow-md p-8 text-center">
-        <Music className="w-12 h-12 mx-auto text-purple-300 mb-4" />
+        <Music className="w-12 h-12 mx-auto text-orange-300 mb-4" />
         <h3 className="text-lg font-medium text-gray-800 mb-2">No songs found</h3>
         <p className="text-gray-600">Try a different BPM or check back later.</p>
         <button
           onClick={onRefresh}
-          className="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center mx-auto"
+          className="mt-4 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors flex items-center justify-center mx-auto"
         >
           <RefreshCw className="w-4 h-4 mr-2" />
           Refresh List
@@ -78,22 +75,13 @@ const SongList: React.FC<SongListProps> = ({
         <div className="flex items-center space-x-4">
           <button
             onClick={onRefresh}
-            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center"
+            className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors flex items-center"
           >
             <RefreshCw className="w-4 h-4 mr-2" />
             Refresh List
           </button>
         </div>
       </div>
-
-      {suggestedAdjustment && (
-        <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <p className="text-yellow-800">
-            Your cadence is running {suggestedAdjustment === 'up' ? 'faster' : 'slower'} than the current tempo.
-            Consider adjusting the BPM {suggestedAdjustment === 'up' ? 'up' : 'down'} to match your natural rhythm.
-          </p>
-        </div>
-      )}
 
       <div className="mb-6 flex justify-center space-x-4">
         <button
@@ -116,13 +104,12 @@ const SongList: React.FC<SongListProps> = ({
       
       <div className="grid grid-cols-1 gap-6">
         {songs.map((song, index) => (
-          <div key={song.id} className={suggestedAdjustment && index === 0 ? 'ring-2 ring-yellow-400 rounded-xl' : ''}>
-            <SongCard 
-              song={song} 
-              index={index}
-              onAddToQueue={onAddToQueue}
-            />
-          </div>
+          <SongCard 
+            key={song.id}
+            song={song} 
+            index={index}
+            onAddToQueue={onAddToQueue}
+          />
         ))}
       </div>
     </div>

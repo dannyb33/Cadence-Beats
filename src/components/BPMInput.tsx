@@ -36,7 +36,7 @@ const BPMInput: React.FC<BPMInputProps> = ({ onSubmit, isLoading, currentBpm }) 
   return (
     <div className="w-full max-w-md mx-auto bg-white bg-opacity-90 backdrop-blur-lg rounded-xl shadow-lg p-8 mb-10">
       <div className="flex items-center justify-center space-x-2 mb-6">
-        <Volume2 className="w-6 h-6 text-purple-600" />
+        <Volume2 className="w-6 h-6 text-orange-500" />
         <h2 className="text-2xl font-semibold text-gray-800">Find songs by BPM</h2>
       </div>
       
@@ -53,10 +53,10 @@ const BPMInput: React.FC<BPMInputProps> = ({ onSubmit, isLoading, currentBpm }) 
             <button 
               type="button" 
               onClick={decrementBPM}
-              className="p-2 rounded-full border border-gray-300 hover:bg-purple-50 transition-colors"
+              className="p-2 rounded-full border border-gray-300 hover:bg-orange-50 transition-colors"
               aria-label="Decrease BPM"
             >
-              <Minus size={16} className="text-purple-600" />
+              <Minus size={16} className="text-orange-500" />
             </button>
             
             <div className="flex-1 mx-4">
@@ -67,17 +67,17 @@ const BPMInput: React.FC<BPMInputProps> = ({ onSubmit, isLoading, currentBpm }) 
                 max={200}
                 value={bpm}
                 onChange={handleSliderChange}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-purple-600"
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-orange-500"
               />
             </div>
             
             <button 
               type="button" 
               onClick={incrementBPM}
-              className="p-2 rounded-full border border-gray-300 hover:bg-purple-50 transition-colors"
+              className="p-2 rounded-full border border-gray-300 hover:bg-orange-50 transition-colors"
               aria-label="Increase BPM"
             >
-              <Plus size={16} className="text-purple-600" />
+              <Plus size={16} className="text-orange-500" />
             </button>
           </div>
           
@@ -89,7 +89,7 @@ const BPMInput: React.FC<BPMInputProps> = ({ onSubmit, isLoading, currentBpm }) 
               max={200}
               value={bpm}
               onChange={(e) => setBpm(parseInt(e.target.value, 10) || 120)}
-              className="w-20 text-center text-3xl font-bold text-gray-800 bg-transparent border-b-2 border-purple-600 focus:outline-none focus:border-purple-700"
+              className="w-20 text-center text-3xl font-bold text-gray-800 bg-transparent border-b-2 border-orange-500 focus:outline-none focus:border-orange-600"
             />
             <span className="ml-2 text-gray-500 text-lg">BPM</span>
           </div>
@@ -98,7 +98,7 @@ const BPMInput: React.FC<BPMInputProps> = ({ onSubmit, isLoading, currentBpm }) 
         <button
           type="submit"
           disabled={isLoading}
-          className={`w-full py-3 px-4 bg-gradient-to-r from-purple-600 to-blue-500 text-white font-medium rounded-lg shadow-md hover:from-purple-700 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 transition-all ${
+          className={`w-full py-3 px-4 bg-gradient-to-r from-orange-500 to-red-500 text-white font-medium rounded-lg shadow-md hover:from-orange-600 hover:to-red-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50 transition-all ${
             isLoading ? 'opacity-70 cursor-not-allowed' : ''
           }`}
         >
